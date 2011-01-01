@@ -1,0 +1,11 @@
+{ "name": "face.js"
+ , "description":  "Face detection using Haarlike features algorithm of OpenCV"
+ , "version":  "0.1"
+ , "author": "Tomas Alvarez <seba.alvarez16@gmail.com>"
+ , "keywords": ["facedetection", "opencv", "haarlike"]
+ , "scripts": {
+   "preinstall": "node-waf configure build"
+ }
+ , "engines": { "node": ">= 0.4.2" }
+ , "main": "./build/default/face.node"
+}
