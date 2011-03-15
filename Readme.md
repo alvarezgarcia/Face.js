@@ -12,7 +12,30 @@
 
 Just check that you have installed the latest OpenCV stable tarball (currently 2.2).
 
-## Example
+## Basic example
+
+	You simply give it a picture, you must check if it exists before , and use the run method then, it will asynchronously computate the image and try to find faces, when it is done it transfers an array of objects (an array of faces), each one with four properties, x, y, width and height.
+	The basic idea is this:
+
+	var Face = require('../build/default/face.node'),
+    		recognizer = new Face.init();
+
+	var input = '/home/sebastian/last.jpg';
+
+	recognizer.run(input, function(faces){
+
+		            console.log(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
+		}
+
+	});
+
+	You can set a minimum size for a face, and give it to run method (after the string with the image), if you dont provide it, 
+	Face.js will set it to 20 (it's a good value).
+
+	NOTE: It uses node-canvas, but is not necessary, I used it (and I include it in deps) just for draw rectangles in the faces areas, but you can use the values that run method returns for each face (x, y, wdith, height) in another way.
+
+
+## Complete example
 
 	var Face = require('../build/default/face.node'),
 			recognizer = new Face.init();
@@ -55,26 +78,6 @@ Just check that you have installed the latest OpenCV stable tarball (currently 2
 
 	console.log('Server started on port 3000')
 
-	You simply give it a picture, you must check if it exists before , and use the run method then, it will asynchronously computate the image and try to find faces, when it is done it transfers an array of objects (an array of faces), each one with four properties, x, y, width and height.
-	In the example, I extended the basic approach a bit, using a http server, and the node-canvas module, but the basic idea is this:
-
-	var Face = require('../build/default/face.node'),
-    		recognizer = new Face.init();
-
-	var input = '/home/sebastian/last.jpg';
-
-	recognizer.run(input, function(faces){
-
-	    console.log("I found " + faces.length + " faces");
-		for(var i = 0; i < faces.length; i++) {
-		            console.log(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
-		}
-
-	});
-
-	You can set a minimum size for a face, and give it to run method (after the string with the image), if you dont provide it, Face.js will set it to 20 (it's a good value).
-
-	NOTE: It uses node-canvas, but is not necessary, I used it (and I include it in deps) just for draw rectangles in the faces areas, but you can use the values that run method returns for each face (x, y, wdith, height) in another way.
 
 ## Versions
 
