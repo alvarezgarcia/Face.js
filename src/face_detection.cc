@@ -1,4 +1,4 @@
-#include <cv.h>
+#include "cv.h"
 
 IplImage* nice_my_frame(IplImage* frame) {
 
@@ -10,7 +10,7 @@ IplImage* nice_my_frame(IplImage* frame) {
 
 CvSeq* detect_faces(IplImage* frame, CvHaarClassifierCascade* cascade, CvMemStorage* memory, int min_size) {
 
-		CvSeq* faces = cvHaarDetectObjects(frame, cascade, memory, 1.1, 2, CV_HAAR_DO_CANNY_PRUNING, cvSize(min_size, min_size));
+		CvSeq* faces = cvHaarDetectObjects(frame, cascade, memory, 1.1, 2, CV_HAAR_DO_CANNY_PRUNING, cvSize(min_size, min_size), cvSize(0, 0));
 		cvClearMemStorage(memory);
 
 		return faces;

@@ -4,8 +4,8 @@
 #include <unistd.h>
 #include <string.h>
 
-#include <cv.h>
-#include <highgui.h>
+#include "cv.h"
+#include "highgui.h"
 
 #include "face_detection.h"
 

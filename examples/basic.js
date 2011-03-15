@@ -1,7 +1,7 @@
 var Face = require('../build/default/face.node'),
 	recognizer = new Face.init();
 
-var input = '/home/sebastian/last.jpg';
+var input = '/tmp/face.png';
 
 recognizer.run(input, function(faces){
 

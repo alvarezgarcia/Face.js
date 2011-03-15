@@ -7,7 +7,7 @@ var Face = require('../build/default/face.node'),
 
 
 function getFaces(res) {
-	var input = './samples/frame.jpg';
+	var input = '/tmp/face.png';
 
 	res.write("Getting faces...<BR>");
 	recognizer.run(input, function(faces){
