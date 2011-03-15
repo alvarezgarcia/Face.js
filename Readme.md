@@ -14,7 +14,9 @@ Just check that you have installed the latest OpenCV stable tarball (currently 2
 
 ## Basic example
 
-	You simply give it a picture, you must check if it exists before , and use the run method then, it will asynchronously computate the image and try to find faces, when it is done it transfers an array of objects (an array of faces), each one with four properties, x, y, width and height.
+	You simply give it a picture, you must check if it exists before , and use the run method then, it will 
+	asynchronously computate the image and try to find faces, when it is done it transfers an array of
+	objects (an array of faces), each one with four properties, x, y, width and height.
 	The basic idea is this:
 
 	var Face = require('../build/default/face.node'),
@@ -32,7 +34,8 @@ Just check that you have installed the latest OpenCV stable tarball (currently 2
 	You can set a minimum size for a face, and give it to run method (after the string with the image), if you dont provide it, 
 	Face.js will set it to 20 (it's a good value).
 
-	NOTE: It uses node-canvas, but is not necessary, I used it (and I include it in deps) just for draw rectangles in the faces areas, but you can use the values that run method returns for each face (x, y, wdith, height) in another way.
+	NOTE: It uses node-canvas, but is not necessary, I used it (and I include it in deps) just for draw rectangles in the faces areas
+	, but you can use the values that run method returns for each face (x, y, wdith, height) in another way.
 
 
 ## Complete example
