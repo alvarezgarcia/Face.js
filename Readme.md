@@ -2,14 +2,15 @@
 # Face.js
 
 	by Tomas Alvarez (http://twitter.com/alvarez_tomas)
-	Face.js is a OpenCV Haar algorithm implementation for Javascript, in-progress right now, which aims to provide a simple way to detect faces in a picture.
+	Face.js is a OpenCV Haar algorithm implementation for Javascript, in-progress right now, which aims to provide a simple way 
+	to detect faces in a picture.
 
 ## Installation
 
 	git clone git://github.com/talvarez/Face.js.git
 	node-waf configure build
 
-Just check that you have installed OpenCV, I tested it only with OpenCV-2.1.0, but I suppose that will work with 2.2.0.
+Just check that you have installed the latest OpenCV stable tarball (currently 2.2).
 
 ## Example
 
