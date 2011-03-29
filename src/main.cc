@@ -7,49 +7,44 @@
 #include "cv.h"
 #include "highgui.h"
 
+#include "main.h"
 #include "face_detection.h"
 
 using namespace node;
 using namespace v8;
 
-class Face: ObjectWrap
-{
-private:
-  unsigned int min_size;
-  char *filename;
-  IplImage* frame;
-  CvMemStorage* memory;
-  CvSeq* total_faces;
-  CvHaarClassifierCascade* cascade;
-
-public:
-
-  static Persistent<FunctionTemplate> s_ct;
-  static void Init(Handle<Object> target)
+  void Face::Init(Handle<Object> target)
   {
     HandleScope scope;
 
-    Local<FunctionTemplate> t = FunctionTemplate::New(New);
+	s_ct = Persistent<FunctionTemplate>::New(FunctionTemplate::New(New));
+	s_ct->InstanceTemplate()->SetInternalFieldCount(1);
+	s_ct->SetClassName(String::NewSymbol("init"));
 
-    s_ct = Persistent<FunctionTemplate>::New(t);
-    s_ct->InstanceTemplate()->SetInternalFieldCount(1);
-    s_ct->SetClassName(String::NewSymbol("init"));
+	Local<ObjectTemplate> proto = s_ct->PrototypeTemplate();
+	proto->SetAccessor(String::NewSymbol("img"), GetImg, SetImg);
+	proto->SetAccessor(String::NewSymbol("oncomplete"), GetOnComplete, SetOnComplete);
+	proto->SetAccessor(String::NewSymbol("minsize"), GetMinSize, SetMinSize);
+	proto->SetAccessor(String::NewSymbol("maxsize"), GetMaxSize, SetMaxSize);
 
     NODE_SET_PROTOTYPE_METHOD(s_ct, "run", Run);
 
-    target->Set(String::NewSymbol("init"), s_ct->GetFunction());
+	/*
+	proto->SetAccessor(String::NewSymbol("cascade"), GetSrc, SetSrc);
+	proto->SetAccessor(String::NewSymbol("onerror"), GetSrc, SetSrc);
+	*/
+	/*proto->SetAccessor(String::NewSymbol("complete"), GetComplete);
+	proto->SetAccessor(String::NewSymbol("width"), GetWidth);
+	proto->SetAccessor(String::NewSymbol("height"), GetHeight);
+	proto->SetAccessor(String::NewSymbol("onload"), GetOnload, SetOnload);
+	proto->SetAccessor(String::NewSymbol("onerror"), GetOnerror, SetOnerror);
+	*/
+	target->Set(String::NewSymbol("init"), s_ct->GetFunction());
 
   }
+  
 
-  Face()
-  {
-  }
-
-  ~Face()
-  {
-  }
-
-  static Handle<Value> New(const Arguments& args)
+  Handle<Value> Face::New(const Arguments& args)
   {
     HandleScope scope;
     Face* fc = new Face();
@@ -57,68 +52,42 @@ public:
 
 	fc->memory = cvCreateMemStorage(0);
 	fc->cascade = (CvHaarClassifierCascade*)cvLoad("../cascades/haarcascade_frontalface_alt.xml", 0, 0, 0);
+	fc->min_size = 20;
+	fc->max_size = 0;
 
     return args.This();
   }
 
-  struct face_baton_t {
-    Face* fc;
-    Persistent<Function> cb;
-  };
-
-  static Handle<Value> Run(const Arguments& args)
+  Handle<Value> Face::Run(const Arguments& args)
   {
-    HandleScope scope;
+
 	Face* fc = ObjectWrap::Unwrap<Face>(args.This());
-
-	Local<Function> cb;
-	face_baton_t *baton = new face_baton_t();
-
-	if(!args[0]->IsString()) {
-		return ThrowException(Exception::TypeError(String::New("Argument 0 must be a string")));
-	}
-
-	String::AsciiValue filename(args[0]);
-	fc->filename = strdup(*filename);
 	fc->frame = cvLoadImage(fc->filename, 3);
 
-	if (!args[1]->IsInt32()) {
-		fprintf(stderr, "No minsize provided, setting 20\n");
-		fc->min_size = 20;
-  	 	cb = Local<Function>::Cast(args[1]);
-	} else {
-		fc->min_size = args[1]->Uint32Value();
-  	 	cb = Local<Function>::Cast(args[2]);
-	}
-
-
+	face_baton_t *baton = new face_baton_t();
     baton->fc = fc;
-    baton->cb = Persistent<Function>::New(cb);
-
     fc->Ref();
 
-    eio_custom(Analize, EIO_PRI_DEFAULT, AfterAnalize, baton);
+	eio_custom(Analize, EIO_PRI_DEFAULT, AfterAnalize, baton);
     ev_ref(EV_DEFAULT_UC);
-
     return Undefined();
   }
 
-
-  static int Analize(eio_req *req)
+  int Face::Analize(eio_req *req)
   {
 
     face_baton_t *baton = static_cast<face_baton_t *>(req->data);
 
 	IplImage* gray_frame;
 	gray_frame = nice_my_frame(baton->fc->frame);
-	baton->fc->total_faces = detect_faces(gray_frame, baton->fc->cascade, baton->fc->memory, baton->fc->min_size);
+	baton->fc->total_faces = detect_faces(gray_frame, baton->fc->cascade, baton->fc->memory, baton->fc->min_size, baton->fc->max_size);
 
 	cvReleaseImage(&gray_frame);
 
     return 0;
   }
 
-  static int AfterAnalize(eio_req *req)
+  int Face::AfterAnalize(eio_req *req)
   {
     HandleScope scope;
     face_baton_t *baton = static_cast<face_baton_t *>(req->data);
@@ -146,7 +115,7 @@ public:
 
     TryCatch try_catch;
 
-    baton->cb->Call(Context::GetCurrent()->Global(), 1, args);
+    baton->fc->oncomplete->Call(Context::GetCurrent()->Global(), 1, args);
 
     if (try_catch.HasCaught()) {
       FatalException(try_catch);
@@ -158,8 +127,8 @@ public:
     return 0;
   }
 
-};
 
+ 
 Persistent<FunctionTemplate> Face::s_ct;
 
 extern "C" {

@@ -1,4 +1,4 @@
-# project noname (1.0) configured on Sun Mar 13 16:58:18 2011 by
+# project noname (1.0) configured on Fri Mar 25 02:53:08 2011 by
 # waf 1.5.16 (abi 7, python 20605f0 on linux2)
 # using /usr/bin/node-waf configure build
 #
@@ -46,5 +46,5 @@ ok /usr
 ----------------------------------------
 Checking for opencv
 pkg-config --errors-to-stdout --print-errors --cflags --libs opencv
--I/usr/local/include/opencv -I/usr/local/include  -L/usr/local/lib -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_contrib -lopencv_legacy  
+-I/usr/local/include/opencv -I/usr/local/include  -L/usr/local/lib -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_contrib -lopencv_legacy -lopencv_flann  
 yes
