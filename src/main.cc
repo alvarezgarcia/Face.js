@@ -51,7 +51,7 @@ using namespace v8;
     fc->Wrap(args.This());
 
 	fc->memory = cvCreateMemStorage(0);
-	fc->cascade = (CvHaarClassifierCascade*)cvLoad("../cascades/haarcascade_frontalface_alt.xml", 0, 0, 0);
+	fc->cascade = (CvHaarClassifierCascade*)cvLoad("./vendor/Face.js/cascades/haarcascade_frontalface_alt.xml", 0, 0, 0);
 	fc->min_size = 20;
 	fc->max_size = 0;
 
