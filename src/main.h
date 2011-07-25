@@ -17,6 +17,7 @@ private:
   unsigned int max_size;
 
   char *filename;
+  char *pathto;
   IplImage* frame;
   CvMemStorage* memory;
   CvSeq* total_faces;
@@ -56,4 +57,6 @@ public:
   static void SetMinSize(Local<String> name, Local<Value> value, const AccessorInfo& info);
   static Handle<Value> GetMaxSize(Local<String> name, const AccessorInfo& info);
   static void SetMaxSize(Local<String> name, Local<Value> value, const AccessorInfo& info);
+  static Handle<Value> GetPathTo(Local<String> name, const AccessorInfo& info);
+  static void SetPathTo(Local<String> name, Local<Value> value, const AccessorInfo& info);
 };
