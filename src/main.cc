@@ -17,9 +17,9 @@ using namespace v8;
   {
     HandleScope scope;
 
-	s_ct = Persistent<FunctionTemplate>::New(FunctionTemplate::New(New));
-	s_ct->InstanceTemplate()->SetInternalFieldCount(1);
-	s_ct->SetClassName(String::NewSymbol("init"));
+    s_ct = Persistent<FunctionTemplate>::New(FunctionTemplate::New(New));
+    s_ct->InstanceTemplate()->SetInternalFieldCount(1);
+    s_ct->SetClassName(String::NewSymbol("init"));
 
     Local<ObjectTemplate> proto = s_ct->PrototypeTemplate();
     proto->SetAccessor(String::NewSymbol("img"), GetImg, SetImg);
@@ -30,9 +30,7 @@ using namespace v8;
 
     NODE_SET_PROTOTYPE_METHOD(s_ct, "run", Run);
     target->Set(String::NewSymbol("init"), s_ct->GetFunction());
-
   }
-
 
   Handle<Value> Face::New(const Arguments& args)
   {
@@ -99,8 +97,6 @@ using namespace v8;
     delete baton;
     return 0;
   }
-
-
 
 Persistent<FunctionTemplate> Face::s_ct;
 
