@@ -10,45 +10,54 @@
 using namespace node;
 using namespace v8;
 
-  Handle<Value> Face::GetImg(Local<String> name,	const AccessorInfo& info) {
-		  Face* fc = ObjectWrap::Unwrap<Face>(info.This());
-		  return String::New(fc->filename);
+  Handle<Value> Face::GetImg(Local<String> name,  const AccessorInfo& info) {
+    Face* fc = ObjectWrap::Unwrap<Face>(info.This());
+    return String::New(fc->filename);
   }
   void Face::SetImg(Local<String> name, Local<Value> value, const AccessorInfo& info) {
-		  Face* fc = ObjectWrap::Unwrap<Face>(info.This());
-
-		  String::AsciiValue filename(value);
-		  fc->filename = strdup(*filename);
-
+    Face* fc = ObjectWrap::Unwrap<Face>(info.This());
+    String::AsciiValue filename(value);
+    fc->filename = strdup(*filename);
   }
 
-  Handle<Value> Face::GetOnComplete(Local<String> name, const AccessorInfo& info) {
+
+  Handle<Value> Face::GetOnComplete(Local<String> name, const AccessorInfo& info) 
+  {
   }
 
   void Face::SetOnComplete(Local<String> name, Local<Value> value, const AccessorInfo& info) {
-		  Face* fc = ObjectWrap::Unwrap<Face>(info.This());
-		  fc->oncomplete = Persistent<Function>::New(Handle<Function>::Cast(value));
-
+    Face* fc = ObjectWrap::Unwrap<Face>(info.This());
+    fc->oncomplete = Persistent<Function>::New(Handle<Function>::Cast(value));
   }
 
-  Handle<Value> Face::GetMinSize(Local<String> name, const AccessorInfo& info)
+  Handle<Value> Face::GetMinSize(Local<String> name, const AccessorInfo& info) 
   {
-
   }
 
-  void Face::SetMinSize(Local<String> name, Local<Value> value, const AccessorInfo& info)
-  {
-		Face* fc = ObjectWrap::Unwrap<Face>(info.This());
-		fc->min_size = value->Int32Value();
+  void Face::SetMinSize(Local<String> name, Local<Value> value, const AccessorInfo& info) {
+    Face* fc = ObjectWrap::Unwrap<Face>(info.This());
+    fc->min_size = value->Int32Value();
   }
 
   Handle<Value> Face::GetMaxSize(Local<String> name, const AccessorInfo& info)
   {
-
   }
 
   void Face::SetMaxSize(Local<String> name, Local<Value> value, const AccessorInfo& info)
   {
-		Face* fc = ObjectWrap::Unwrap<Face>(info.This());
-		fc->max_size = value->Int32Value();
+    Face* fc = ObjectWrap::Unwrap<Face>(info.This());
+    fc->max_size = value->Int32Value();
+  }
+
+  Handle<Value> Face::GetPathTo(Local<String> name, const AccessorInfo& info)
+  {
+    Face* fc = ObjectWrap::Unwrap<Face>(info.This());
+    return String::New(fc->pathto);
+  }
+
+  void Face::SetPathTo(Local<String> name, Local<Value> value, const AccessorInfo& info)
+  {
+    Face* fc = ObjectWrap::Unwrap<Face>(info.This());
+    String::AsciiValue ascii(value);
+    fc->pathto = strdup(*ascii);
   }
