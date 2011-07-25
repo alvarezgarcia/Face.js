@@ -1,6 +1,5 @@
 #include <v8.h>
 #include <node.h>
-#include <iostream>
 
 #include <unistd.h>
 #include <string.h>
@@ -18,9 +17,9 @@ using namespace v8;
   {
     HandleScope scope;
 
-    s_ct = Persistent<FunctionTemplate>::New(FunctionTemplate::New(New));
-    s_ct->InstanceTemplate()->SetInternalFieldCount(1);
-    s_ct->SetClassName(String::NewSymbol("init"));
+	s_ct = Persistent<FunctionTemplate>::New(FunctionTemplate::New(New));
+	s_ct->InstanceTemplate()->SetInternalFieldCount(1);
+	s_ct->SetClassName(String::NewSymbol("init"));
 
     Local<ObjectTemplate> proto = s_ct->PrototypeTemplate();
     proto->SetAccessor(String::NewSymbol("img"), GetImg, SetImg);
