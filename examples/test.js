@@ -6,28 +6,48 @@ var Face = require('../build/default/face.node'),
 	ctx = canvas.getContext('2d');
 
 
-function boundFaces(input, faces) {
+function boundFaces(input, faces, res) {
 	var img = new Image;
 
 	img.onload = function(){
 		ctx.drawImage(img, 0, 0);
 	}
 
+
+	var threshold_false_smile = 15;
 	img.src = input;
 
-	ctx.strokeStyle = 'rgb(255, 0, 0)';
 	for(var i = 0; i < faces.length; i++) {
+
+		res.write('Intensity: '+faces[i].intensity+'<BR>');
+
+		if(faces[i].smile) {
+			if(faces[i].intensity > threshold_false_smile) {
+				ctx.strokeStyle = 'rgb(0, 255, 0)';
+			} else {
+				ctx.strokeStyle = 'rgb(255, 0, 0)';
+			}
+		} else {
+
+			ctx.strokeStyle = 'rgb(255, 0, 0)';
+		}
+
 		ctx.strokeRect(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
 	}
 }
 
 
 function getFaces(res) {
-	recognizer.img = '/home/sebastian/mtv.png';
+
+	recognizer.img = './samples/frame4.png';
+	recognizer.pathto = '../cascades/';
+
+	recognizer.checkSmile = true;
+	recognizer.minsize = 20;
 
 	recognizer.oncomplete = function(faces){
 
-		boundFaces(recognizer.img, faces);
+		boundFaces(recognizer.img, faces, res);
 		res.write("I found " + faces.length + " faces <BR>");
 		res.end('<img src="' + canvas.toDataURL() + '" />');
 

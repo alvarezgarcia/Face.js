@@ -61,3 +61,15 @@ using namespace v8;
     String::AsciiValue ascii(value);
     fc->pathto = strdup(*ascii);
   }
+
+  Handle<Value> Face::GetChkSmile(Local<String> name, const AccessorInfo& info)
+  {
+    Face* fc = ObjectWrap::Unwrap<Face>(info.This());
+    return Boolean::New(fc->checkSmile);
+  }
+
+  void Face::SetChkSmile(Local<String> name, Local<Value> value, const AccessorInfo& info)
+  {
+    Face* fc = ObjectWrap::Unwrap<Face>(info.This());
+	fc->checkSmile = value->BooleanValue();
+  }

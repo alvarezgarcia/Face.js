@@ -1,10 +1,9 @@
 var Face = require('../build/default/face.node'),
   detector = new Face.init();
 
-detector.img = './samples/frame.jpg';
+detector.img = './samples/frame1.png';
 detector.maxsize = 20;
-detector.pathto = '../cascades/haarcascade_frontalface_alt.xml'
-console.log(detector.img);
+detector.pathto = '../cascades/'
 
 detector.oncomplete = function(faces){
   console.log("I found " + faces.length + " faces");

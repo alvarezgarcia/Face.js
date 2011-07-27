@@ -2,8 +2,8 @@ var Face = require('../build/default/face.node'),
   recognizer = new Face.init();
 
 function getFaces(res) {
-  recognizer.img = './samples/frame.jpg';
-  recognizer.pathto = '../cascades/haarcascade_frontalface_alt.xml';
+  recognizer.img = './samples/frame1.png';
+  recognizer.pathto = '../cascades/';
   recognizer.oncomplete = function(faces){
     res.end("I found " + faces.length + " faces <BR>");
   };

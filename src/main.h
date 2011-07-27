@@ -18,7 +18,9 @@ private:
 
   char *filename;
   char *pathto;
+  bool checkSmile;
   IplImage* frame;
+  IplImage* gray;
   CvMemStorage* memory;
   CvSeq* total_faces;
   CvHaarClassifierCascade* cascade;
@@ -59,4 +61,7 @@ public:
   static void SetMaxSize(Local<String> name, Local<Value> value, const AccessorInfo& info);
   static Handle<Value> GetPathTo(Local<String> name, const AccessorInfo& info);
   static void SetPathTo(Local<String> name, Local<Value> value, const AccessorInfo& info);
+  static Handle<Value> GetChkSmile(Local<String> name, const AccessorInfo& info);
+  static void SetChkSmile(Local<String> name, Local<Value> value, const AccessorInfo& info);
+
 };

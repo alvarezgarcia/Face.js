@@ -37,41 +37,61 @@ Just check that you have installed the latest OpenCV stable tarball (currently 2
 
 	var Face = require('../build/default/face.node'),
 	recognizer = new Face.init(),
-
 	Canvas = require('../deps/canvas/canvas.js'),
 	Image = Canvas.Image,
 	canvas = new Canvas(800, 600),
 	ctx = canvas.getContext('2d');
 
-	function boundFaces(input, faces) {
+
+	function boundFaces(input, faces, res) {
 		var img = new Image;
 
 		img.onload = function(){
 				ctx.drawImage(img, 0, 0);
 		}
 
+
+		var threshold_false_smile = 15;
 		img.src = input;
 
-		ctx.strokeStyle = 'rgb(255, 0, 0)';
 		for(var i = 0; i < faces.length; i++) {
+
+				res.write('Intensity: '+faces[i].intensity+'<BR>');
+
+				if(faces[i].smile) {
+						if(faces[i].intensity > threshold_false_smile) { //Threshold possible false positives smiles
+								ctx.strokeStyle = 'rgb(0, 255, 0)';
+						} else {
+								ctx.strokeStyle = 'rgb(255, 0, 0)';
+						}
+				} else {
+
+						ctx.strokeStyle = 'rgb(255, 0, 0)';
+				}
+
 				ctx.strokeRect(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
 		}
 	}
 
 
 	function getFaces(res) {
-		recognizer.img = '/tmp/faces.png';
 
-		recognizer.minsize = 50;
-		recognizer.run();
+		recognizer.img = './samples/frame5.png';
+		recognizer.pathto = '../cascades/';
+
+		recognizer.checkSmile = true;
+		recognizer.minsize = 20;
 
 		recognizer.oncomplete = function(faces){
 
-				boundFaces(recognizer.img, faces);
+				boundFaces(recognizer.img, faces, res);
 				res.write("I found " + faces.length + " faces <BR>");
 				res.end('<img src="' + canvas.toDataURL() + '" />');
 
 		};
+
+		recognizer.run();
+
 	}
 
 	var http = require('http');
@@ -85,7 +105,12 @@ Just check that you have installed the latest OpenCV stable tarball (currently 2
 	console.log('Server started on port 3000');
 
 
+	Setting 'checkSmile' true, it will scan the previously detected face and search a possible smile gesture.
+	The faces object now includes a property, called 'smile' in case it's true another new property will be added to the object, called 'intensity'.
+	'intensity' property is used for control possible false positives smiles, maybe the detector detect a smile, but its wrong (this is common in computer
+	vision programs, because the detectors handles a lot of variables like, illumination, pose, size) so you can threshold it.
 	You can set a minimum, and a maximum too, size for a face, if you dont provide it, Face.js will set it to 20 for the min, and 0 for the max (0 means all the sizes in the maxsize property).
+
 	NOTE: It uses node-canvas, but is not necessary, I used it (and I include it in deps) just for draw rectangles in the faces areas.
 
 
@@ -94,7 +119,7 @@ Just check that you have installed the latest OpenCV stable tarball (currently 2
 
 Tested with:
 
-	- node 0.4.2
+	- node 0.4.8
 	- opencv 2.2.0
 
 ## License
